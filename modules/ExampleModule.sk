@@ -1,8 +1,6 @@
 options:
-    SkriptVersion: 0.0.1
+    ModuleVersion: 0.0.1
 
-    
 on load:
 	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aExample Module Enabled."
-	core_check_module_version("https://raw.githubusercontent.com/andrei923/LeafCore/master/modules/Chat.sk", "{@SkriptVersion}")
-	save yaml "core.config"
+	core_check_module_version("https://raw.githubusercontent.com/andrei923/LeafCore/master/modules/ExampleModule.sk", "{@SkriptVersion}")
