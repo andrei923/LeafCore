@@ -1,60 +1,8 @@
 options:
-    Version: Module_Version_>0.0.1<_Module_Version
+    SkriptVersion: 0.0.1
 
-on chat:
-	if yaml value "Settings.Chat.Enabled" from "core.config" is set:
-		if yaml value "Settings.Chat.Cooldown.Enabled" from "core.config" is true:
-			set {_delay} to difference between {core::cache::player::%player%::chat::cooldown} and now 
-			if {_delay} <= {core::cache::Chat::Cooldown}:
-				set {_wait} to difference between {core::cache::Chat::Cooldown} and {_delay}
-				set {_message} to yaml value "Messages.Chat-Cooldown" from "core.config"
-				replace all "{time}" with "%{_wait}%" in {_message}
-				send {_message} to player
-				cancel event	
-				stop
-			set {core::cache::player::%player%::chat::cooldown} to now		
-		set {_msg} to yaml value "Settings.Chat.Format" from "core.config"
-		replace all "{player}" with "%player%" in {_msg}
-		replace all "{message}" with message in {_msg}
-		replace all "{DisplayName}" with player's display name in {_msg}		
-		if yaml value "Settings.Chat.Emoticons.Enabled" from "core.config" is set:
-			loop yaml list "Settings.Chat.Emoticons.List" from "core.config":
-				set {_value} to loop-value-1
-				set {_check} to first element of {_value} split at " -> "
-				set {_emoticon} to last element of {_value} split at " -> "
-				if {_msg} contains {_check}:
-					replace all {_check} with {_emoticon} in {_msg}	
-		if yaml value "Settings.Chat.Villager Talk.Enabled" from "core.config" is true:
-			loop all players in radius yaml value "Settings.Chat.Villager Talk.Radius" from "core.config" of player:
-				if minecraft version contains "1.8":
-					if message = "no" or "No" or "NO":
-						core_play_sound2(loop-player, "VILLAGER_NO")
-					if message = "yes" or "Yes" or "Yes":
-						core_play_sound2(loop-player, "VILLAGER_YES")
-					if message != "no" or "No" or "NO" or "yes" or "Yes" or "Yes":
-						core_play_sound2(loop-player, random element out of "VILLAGER_IDLE" and "VILLAGER_HAGGLE")	
-				else:
-					if message = "no" or "No" or "NO":
-						core_play_sound2(loop-player, "ENTITY_VILLAGER_NO")
-					if message = "yes" or "Yes" or "Yes":
-						core_play_sound2(loop-player, "ENTITY_VILLAGER_YES")
-					if message != "no" or "No" or "NO" or "yes" or "Yes" or "Yes":
-						core_play_sound2(loop-player, random element out of "ENTITY_VILLAGER_AMBIENT" and "ENTITY_VILLAGER_TRADE")																																															 								
-		set chat format to {_msg}
-		set chat recipients to all players
     
 on load:
-    core_check_yaml("config", "Settings.Chat.Enabled", "true", "boolean")
-    core_check_yaml("config", "Settings.Chat.Format", "{DisplayName} &8➥ &7{message}")	
-    core_check_yaml("config", "Settings.Chat.Villager Talk.Enabled", "true", "boolean")	
-    core_check_yaml("config", "Settings.Chat.Villager Talk.Radius", "8", "number")	
-    core_check_yaml("config", "Settings.Chat.Emoticons.Enabled", "true", "boolean")	
-    core_check_yaml("config", "Settings.Chat.Emoticons.List", ":) -> ☺||:-) -> ☻||:( -> ☹||<3 -> ❤||*check* -> ✔||*caution* -> ⚠", "list")	
-    core_check_yaml("config", "Settings.Chat.Cooldown.Enabled", "true", "boolean")	
-    core_check_yaml("config", "Settings.Chat.Cooldown.Delay", "5 seconds")
-    set {core::cache::Chat::Cooldown} to yaml value "Settings.Chat.Cooldown.Delay" from "core.config" parsed as timespan
-    broadcast "&7❒ &a&nLeafCORE&r &8➩ &aChat Module Enabled."
-    set {_ver} to text from "%{_arenas}%" = "TVBJ2kDyuXoTcsGvGbj4"
-    if {_ver} != {@version}:
-        broadcast "&7❒ &a&nLeafCORE&r &8➩ &aChat Module Oudated, please download the new version."
-    save yaml "core.config"
+	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aExample Module Enabled."
+	core_check_module_version("https://raw.githubusercontent.com/andrei923/LeafCore/master/modules/Chat.sk", "{@SkriptVersion}")
+	save yaml "core.config"
