@@ -1,0 +1,55 @@
+on load:
+	if yaml value "Help.Lines Per Page" from "core.config" is not set:
+		set yaml value "Help.Lines Per Page" from "core.config" to 5	
+	if yaml value "Help.Header" from "core.config" is not set:
+		set yaml value "Help.Header" from "core.config" to "&e✱ &8■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ &e✱"	
+	if yaml value "Help.Commands" from "core.config" is not set:
+		set yaml value "Help.Commands.tp.Display" from "core.config" to "&f&l» &e/tp"
+		set yaml value "Help.Commands.tp.World" from "core.config" to "world_nether"
+		set yaml value "Help.Commands.lobby.Display" from "core.config" to "&f&l» &e/lobby"
+		set yaml value "Help.Commands.lobby.Permission" from "core.config" to "need.perm"
+		set yaml value "Help.Commands.warp.Display" from "core.config" to "&f&l» &e/warp"
+		set yaml value "Help.Commands.warp.Permission" from "core.config" to "need.perm"
+		set yaml value "Help.Commands.warp.World" from "core.config" to "world_nether"
+	if yaml value "Help.Footer" from "core.config" is not set:
+		set yaml value "Help.Footer" from "core.config" to "&e✱ &8■■■■■&r &8(&eType &n/help {next-page}&e for next page. &8■■■■■ &e✱"		
+	if yaml value "Help.Footer Last Page" from "core.config" is not set:
+		set yaml value "Help.Footer Last Page" from "core.config" to "&e✱ &8■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ &e✱"			
+	if yaml value "Help.No Pages" from "core.config" is not set:
+		set yaml value "Help.No Pages" from "core.config" to "&7&nNo more pages"			
+	wait a second
+	save yaml "core.config"
+	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aCustomHelp Module Enabled."
+			
+			
+command help [<number = 1>]:
+	trigger:	
+		loop yaml nodes with keys "Help.Commands" from "core.config":
+			set {_right} to true
+			yaml value "Help.Commands.%loop-value%.World" from "core.config" is set:
+				player's world is not yaml value "Help.Commands.%loop-value%.World" from "core.config"
+				set {_right} to false
+			yaml value "Help.Commands.%loop-value%.Permission" from "core.config" is set:
+				player doesn't have permission yaml value "Help.Commands.%loop-value%.Permission" from "core.config"	
+				set {_right} to false
+			{_right} is true
+			add yaml value "Help.Commands.%loop-value%.Display" from "core.config" to {_list::*}
+		set {_int} to 1
+		set {_page} to 1
+		loop {_list::*}:
+			set {_line::%{_int}%::%{_page}%} to loop-value-1
+			add 1 to {_int}	
+			{_int} = yaml value "Help.Lines Per Page" from "core.config" + 1:		
+				add 1 to {_page}
+				set {_int} to 1
+		if {_line::1::%arg-1%} is not set:
+			send yaml value "Help.No Pages" from "core.config"
+			stop
+		send yaml value "Help.Header" from "core.config"	
+		loop yaml value "Help.Lines Per Page" from "core.config" + 1 times:
+			if {_line::%loop-number%::%arg-1%} is set:
+				send {_line::%loop-number%::%arg-1%}
+		if {_line::1::%arg-1+1%} is set:	
+			send replacer "{next-page}" with "%arg-1+1%" in yaml value "Help.Footer" from "core.config" to player
+		if {_line::1::%arg-1+1%} is not set:	
+			send yaml value "Help.Footer Last Page" from "core.config"

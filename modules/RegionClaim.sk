@@ -1,0 +1,244 @@
+on load:
+	core_check_yaml("config", "Menus.RegionClaim.Manage.Menu", "&8➩ &a&nManage your region.&r")	
+	core_check_yaml("config", "Menus.RegionClaim.Claim.Menu", "&8➩ &a&nClaim your region.&r")	
+	core_check_yaml("config", "Menus.RegionClaim.DeleteClaim.Menu", "&8➩ &a&nDelete your region.&r")			
+	core_check_yaml("config", "Menus.RegionClaim.ManageMembers.Menu", "&8➩ &a&nManage Members.&r")	
+	core_check_yaml("config", "Menus.RegionClaim.ManageMember.Menu", "&8➩ &a&nManage&r &b{player}.&r")		
+	core_check_yaml("config", "Menus.RegionClaim.PurchaseRegion.Menu", "&8➩ &a&nPurchase Region.&r")	
+	core_check_yaml("config", "Menus.RegionClaim.PurchaseRegion.Size", "1", "number")		
+#	core_check_yaml("config", "Menus.RegionClaim.OwnerFormart", "&8➩ &7Leader: &e{player}.&r")
+	core_check_yaml_item("config", "Menus.RegionClaim.ManageMember.Kick", "&7❒ &8⬊ &7&nKick member.&r &8⬋ &7❒", "13", "red clay", "&aClick to to kick from this region.")	
+#	core_check_yaml_item("config", "Menus.RegionClaim.ManageMember.MakeLeader", "&7❒ &8⬊ &7&nRemove member.&r &8⬋ &7❒", "0", "chest", "&aClick to to kick from this region.")	
+	if yaml value "Menus.RegionClaim.Purchase" from "core.config" is not set:
+		core_check_yaml("config", "Menus.RegionClaim.Purchase.Small.Size", "50", "number")
+		core_check_yaml("config", "Menus.RegionClaim.Purchase.Medium.Size", "125", "number")
+		core_check_yaml("config", "Menus.RegionClaim.Purchase.Big.Size", "200", "number")	
+		core_check_yaml_item("config", "Menus.RegionClaim.Purchase.Small", "&7❒ &8⬊ &7&nPurchase Small Region.&r &8⬋ &7❒", "2", "grass", "||&8➩ &e25 X 25 Blocks||||&8➩&aClick to purchase this region.")
+		core_check_yaml_item("config", "Menus.RegionClaim.Purchase.Medium", "&7❒ &8⬊ &7&nPurchase Medium Region.&r &8⬋ &7❒", "4", "grass", "||&8➩ &e50 X 50 Blocks||||&aClick to purchase this region.")
+		core_check_yaml_item("config", "Menus.RegionClaim.Purchase.Big", "&7❒ &8⬊ &7&nPurchase Big Region.&r &8⬋ &7❒", "6", "grass", "||&8➩ &e100 X 100 Blocks||||&aClick to purchase this region.")
+	core_check_yaml_item("config", "Menus.RegionClaim.AddMember.Format", "&7❒ &8⬊ &7&nAdd member.&r &8⬋ &7❒", "0", "chest", "&aClick to add a member")	
+	core_check_yaml_item("config", "Menus.RegionClaim.ManageMembers.Format", "&7❒ &8⬊ &7&nManage members.&r &8⬋ &7❒", "34", "chest", "&aClick to manage the members")		
+	core_check_yaml_item("config", "Menus.RegionClaim.DeleteClaim.Format", "&7❒ &8⬊ &c&nDelete claim.&r &8⬋ &7❒", "35", "red clay", "&aClick here to delete this claim")			
+	core_check_yaml_item("config", "Menus.RegionClaim.MemberManage.Format", "&8➩ &7{player}", "0", "chest", "&7❒ &8⬊ &7&nClick to view options.&r &8⬋ &7❒")			
+	core_check_yaml_item("config", "Menus.RegionClaim.ChangeDefaultGreeting", "&7❒ &8⬊ &7&nClick to change the default&r &egreeting &7&nmessage.&r &8⬋ &7❒", "27", "book", "")	
+	core_check_yaml_item("config", "Menus.RegionClaim.ChangeDefaultFarewell", "&7❒ &8⬊ &7&nClick to change the default&r &efarewell &7&nmessage.&r &8⬋ &7❒", "28", "book", "")		
+	core_check_yaml("config", "Messages.RegionClaim.DefaultGreeting", "&8➩ &aEntering in the region of &e{player}")
+	core_check_yaml("config", "Messages.RegionClaim.DefaultFarewell", "&8➩ &aLeaving the region of &e{player}")
+	core_check_yaml("config", "Messages.RegionClaim.ChangeGreeting", "&8➩ &7Type in chat the new greeting message, you have &c30&7 seconds, you can use &e{player} &7for your name.")
+	core_check_yaml("config", "Messages.RegionClaim.ChangeFarewell", "&8➩ &7Type in chat the new farewell message, you have &c30&7 seconds, you can use &e{player} &7for your name.")	
+	core_check_yaml("config", "Messages.RegionClaim.TimeOut", "&8➩ &cTimeout, you failed to type the name.")	
+	core_check_yaml("config", "Messages.RegionClaim.ChangeFinish", "&8➩ &aDone.")		
+	core_check_yaml("config", "Messages.RegionClaim.ClaimDelete", "&8➩ &cDone, you deleted this claim.")			
+	core_check_yaml("config", "Messages.RegionClaim.Overlap", "&8➩ &cThis region overlaps with another region.")			
+	core_check_yaml("config", "Messages.RegionClaim.PositionSet", "&8➩ &7Position &e{number} &7set.")
+	core_check_yaml("config", "Messages.RegionClaim.PositionNotSet", "&8➩ &7Position &e{number} &7is not set.")	
+	core_check_yaml("config", "Messages.RegionClaim.ClaimSuccess", "&8➩ &a&nNice!, you claimed this region.&r")
+	core_check_yaml("config", "Messages.RegionClaim.AddedMember", "&8➩ &aNice!, you added &7{player} &ato your region.&r")	
+	core_check_yaml("config", "Messages.RegionClaim.PlayerNotFound", "&8➩ &ePlayer not found, are you sure this player is online?.")	
+	core_check_yaml("config", "Messages.RegionClaim.TooSmall", "&8➩ &aYou selection is too small.&r")	
+	core_check_yaml("config", "Messages.RegionClaim.CostActionBar", "&7➩ &fRegion: &8[&c{x}&8x&c{z}&8], &fthis will cost you &a{price}$. &7❒")		
+	core_check_yaml("config", "Messages.RegionClaim.ToggleRegionClaimEnabled", "&8➩ &aEnabled region claim, use left & right click to define the region.&r")		
+	core_check_yaml("config", "Messages.RegionClaim.ToggleRegionClaimDisabled", "&8➩ &cDisabled region claim.")	
+	core_check_yaml("config", "Settings.RegionClaim.PricePerBlock", "5", "number")	
+	core_check_yaml("config", "Settings.RegionClaim.EnabledWorlds", "survival", "list")			
+	wait a second
+	save yaml "core.config"
+	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aRegionCaim Module Enabled."
+	loop yaml list "Settings.RegionClaim.EnabledWorlds" from "core.config":
+		if "%loop-value-1%" parsed as world is set:
+			add "%loop-value-1%" parsed as world to {-core::cache::RegionCaim.EnabledWorlds::*}
+	loop yaml nodes with keys "Menus.RegionClaim.Purchase" from "core.config":	
+		core_cache_item("Menus.RegionClaim.Purchase.%loop-value-1%", "config")			
+
+import:
+	org.bukkit.Bukkit
+	com.leaf.util.RegionUtils
+	com.leaf.events.AnvilGUICompleteEvent
+
+function land_clear_chatAction(p: player):
+	delete metadata value "LandChangeDefaultMsg" of {_p}
+	delete metadata value "LandChangeDefaultType" of {_p}	
+
+function land_ChangeMsg(p: player, type: text):
+	close {_p}'s inventory
+	set metadata value "LandChangeDefaultMsg" of {_p} to "WaitingForReply"
+	set metadata value "LandChangeDefaultType" of {_p} to {_type}	
+	set {_region} to RegionUtils.getRegionAt({_p}.getLocation())
+	send yaml value "Messages.RegionClaim.Change%{_type}%" from "core.config" to {_p}
+	loop 30*24 times:
+		if metadata value "LandChangeDefaultMsg" of {_p} is set:
+			wait a tick
+		if metadata value "LandChangeDefaultMsg" of {_p} != "WaitingForReply":
+			if metadata value "LandChangeDefaultType" of {_p} is "Greeting":
+				RegionUtils.setEnterMessage({_region} and metadata value "LandChangeDefaultMsg" of {_p})
+			if metadata value "LandChangeDefaultType" of {_p} is "Farewell":
+				RegionUtils.setLeaveMessage({_region} and metadata value "LandChangeDefaultMsg" of {_p})					
+			land_clear_chatAction({_p})
+			send yaml value "Messages.RegionClaim.ChangeFinish" from "core.config" to {_p}
+			stop
+	send yaml value "Messages.RegionClaim.TimeOut" from "core.config" to {_p}		
+	land_clear_chatAction({_p})			
+
+on chat:
+	if metadata value "LandChangeDefaultMsg" of player is set:
+		cancel event
+		if message is "cancel":
+			land_clear_chatAction(player)
+			stop
+		set metadata value "LandChangeDefaultMsg" of player to replacer "{player}" with "%player%" in message
+
+function land_ManageMember(p: player, member: player, region: object):
+	open chest inventory with 3 rows named replacer "{player}" with "%{_member}%" in yaml value "Menus.RegionClaim.ManageMember.Menu" from "core.config" to {_p}
+	wait a tick
+	make gui slot yaml value "Menus.RegionClaim.ManageMember.Kick.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.ManageMember.Kick::config} to run:
+		set {_uuid} to uuid of {_member}
+		RegionUtils.removeMember({_region} and {_member})
+		land_ManageRegion({_p} and RegionUtils.getRegionAt({_p}.getLocation()))	
+		delete yaml value "Region.%{_region}.getId()%.Members.%{_uuid}%" from "core.player.data.%uuid of {_p}%"
+		save yaml "core.player.data.%uuid of {_p}%"
+
+function land_BrowseMembers(p: player, region: object):
+	open chest inventory with 6 rows named yaml value "Menus.RegionClaim.ManageMembers.Menu" from "core.config" to {_p}
+	wait a tick	
+	make gui slot 49 of {_p} with {-core::cache::General.Back::config} to run:	
+		land_ManageRegion({_p}, {_region})
+		stop		
+	set {_slot} to 0		
+	loop yaml nodes with keys "Region.%{_region}.getId()%.Members" from "core.player.data.%uuid of {_p}%":
+		set {_member} to loop-value-1
+		set {_check} to {_member} parsed as offline player		
+		set {_name} to yaml value "Region.%{_region}.getId()%.Members.%{_member}%.Name" from "core.player.data.%uuid of {_p}%"
+		set {_skull} to yaml value "Region.%{_region}.getId()%.Members.%{_member}%.Skull" from "core.player.data.%uuid of {_p}%"
+		make gui slot {_slot} of {_p} with {_skull} named replacer "{player}" with "%{_name}%" in yaml value "Menus.RegionClaim.MemberManage.Format.Name" from "core.config" with lore yaml list "Menus.RegionClaim.MemberManage.Format.Lore" from "core.config" to run function land_ManageMember({_p}, {_check}, {_region})
+		add 1 to {_slot}
+		wait a tick
+
+function land_addMember(p: player, member: player, region: object):
+	RegionUtils.addMember({_region} and {_member})
+	set {_uuid} to uuid of {_member}
+	send replacer "{player}" with "%{_member}%" in yaml value "Messages.RegionClaim.AddedMember" from "core.config" to {_p}
+	set yaml value "Region.%{_region}.getId()%.Members.%{_uuid}%.Name" from "core.player.data.%uuid of {_p}%" to "%{_member}%"
+	set yaml value "Region.%{_region}.getId()%.Members.%{_uuid}%.Skull" from "core.player.data.%uuid of {_p}%" to {_i}
+	save yaml "core.player.data.%uuid of {_p}%"
+
+AnvilGUICompleteEvent:
+	if metadata value "LandAddMember" of event.getPlayer() is "WaitingForReply":
+		if event.getString() parsed as player != event.getPlayer():
+			set {_player} to event.getString() parsed as player
+		if {_player} is set:
+			set {_region} to RegionUtils.getRegionAt(event.getPlayer().getLocation())
+			land_addMember(event.getPlayer(), {_player}, {_region})
+		else:
+			send yaml value "Messages.RegionClaim.PlayerNotFound" from "core.config" to event.getPlayer()
+		delete metadata value "LandAddMember" of event.getPlayer()
+
+function land_ManageRegion(p: player, region: object):
+	open chest inventory with 4 rows named yaml value "Menus.RegionClaim.Manage.Menu" from "core.config" to {_p}
+	wait a tick
+	make gui slot yaml value "Menus.RegionClaim.ChangeDefaultGreeting.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.ChangeDefaultGreeting::config} to run function land_ChangeMsg({_p}, "Greeting")
+	make gui slot yaml value "Menus.RegionClaim.ChangeDefaultFarewell.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.ChangeDefaultFarewell::config} to run function land_ChangeMsg({_p}, "Farewell")
+	make gui slot yaml value "Menus.RegionClaim.ManageMembers.Format.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.ManageMembers.Format::config} to run function land_BrowseMembers({_p}, {_region})
+	make gui slot yaml value "Menus.RegionClaim.DeleteClaim.Format.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.DeleteClaim.Format::config} to run:
+		open chest inventory with 6 rows named yaml value "Menus.RegionClaim.DeleteClaim.Menu" from "core.config" to {_p}
+		wait a tick	
+		set {_int} to a random number between 0 and 54
+		make gui slot {_int} of {_p} with {-core::cache::Menus.RegionClaim.DeleteClaim.Format::config} to run:	
+			RegionUtils.deleteRegion({_region} and {_p}.getWorld())
+			send yaml value "Messages.RegionClaim.ClaimDelete" from "core.config" to {_p}
+			close {_p}'s inventory
+	make gui slot yaml value "Menus.RegionClaim.AddMember.Format.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.AddMember.Format::config} to run:
+		set metadata value "LandAddMember" of {_p} to "WaitingForReply"
+		open anvil gui with player head and name "Enter Player" to {_p}
+
+function landBrowsePurchase(p: player):
+	open chest inventory with yaml value "Menus.RegionClaim.PurchaseRegion.Size" from "core.config" rows named yaml value "Menus.RegionClaim.PurchaseRegion.Menu" from "core.config" to {_p}
+	wait a tick
+	loop yaml nodes with keys "Menus.RegionClaim.Purchase" from "core.config":
+		set {_id} to loop-value-1
+		make gui slot yaml value "Menus.RegionClaim.Purchase.%{_id}%.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.Purchase.%{_id}%::config} to run:	
+			set {_loc1} to location of {_p}
+			set {_loc2} to location of {_p}
+			add yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" to z-coords of {_loc1}
+			add yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" to x-coords of {_loc1}
+			remove yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" from z-coords of {_loc2}
+			remove yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" from x-coords of {_loc2}
+			set {-core::cache::player::%{_p}%::region::position1} to {_loc1}
+			set {-core::cache::player::%{_p}%::region::position2} to {_loc2}
+			land_claim({_p})
+
+function land_claim(p: player):
+	if {-core::cache::player::%{_p}%::region::position1} is not set:
+		send replacer "{number}" with "1" in yaml value "Messages.RegionClaim.PositionNotSet" from "core.config" to {_p}
+		stop
+	if {-core::cache::player::%{_p}%::region::position2} is not set:
+		send replacer "{number}" with "2" in yaml value "Messages.RegionClaim.PositionNotSet" from "core.config" to {_p}
+		stop					
+	if {-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2} is set:
+		if RegionUtils.checkOverlap({-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2}) is true:
+			send yaml value "Messages.RegionClaim.Overlap" from "core.config" to {_p}
+			stop
+		if distance between {-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2} < 10:
+			send yaml value "Messages.RegionClaim.TooSmall" from "core.config" to {_p}
+			stop
+		set {_price} to difference between x-coords of {-core::cache::player::%{_p}%::region::position1} and x-coords of {-core::cache::player::%{_p}%::region::position2} * difference between z-coords of {-core::cache::player::%{_p}%::region::position1} and z-coords of {-core::cache::player::%{_p}%::region::position2}					
+		if {_p}'s balance < {_price} * yaml value "Settings.RegionClaim.PricePerBlock" from "core.config":
+			send yaml value "Messages.Homes.BalanceTooLow" from "core.config" to {_p}
+			stop
+		else:
+			remove {_price} * yaml value "Settings.RegionClaim.PricePerBlock" from "core.config" from {_p}'s balance
+		set {_region} to RegionUtils.createRegion({_p}, {-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2})
+		RegionUtils.addOwner({_region} and {_p})
+		RegionUtils.setEnterMessage({_region} and replacer "{player}" with "%{_p}%" in yaml value "Messages.RegionClaim.DefaultGreeting" from "core.config")
+		RegionUtils.setLeaveMessage({_region} and replacer "{player}" with "%{_p}%" in yaml value "Messages.RegionClaim.DefaultFarewell" from "core.config")
+		#Setting a home location so it will not lose it.
+		set {_homeId} to size of yaml nodes with keys "Region" from "core.player.data.%uuid of {_p}%"
+		set yaml value "Homes.Region-%{_homeId}%.Location" from "core.player.data.%uuid of {_p}%" to location of {_p}
+		#
+		set yaml value "Region.%{_region}%.Id" from "core.player.data.%uuid of {_p}%" to {_region}
+		save yaml "core.player.data.%uuid of {_p}%"
+		delete metadata value "LandClaim" of {_p}
+		send yaml value "Messages.RegionClaim.ClaimSuccess" from "core.config" to {_p}
+		delete {-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2}
+		wait a tick
+		land_ManageRegion({_p}, {_region}) 
+
+function land_checkWorld(p: player) :: boolean:
+	loop {-core::cache::RegionCaim.EnabledWorlds::*}:
+		if loop-value-1 is {_p}'s world:
+			set {_result} to true
+	return {_result} ? false		
+
+command claimToggle:
+	trigger:
+		land_checkWorld(player) is true
+		if metadata value "LandClaim" of player is set:
+			delete metadata value "LandClaim" of player
+			send yaml value "Messages.RegionClaim.ToggleRegionClaimDisabled" from "core.config" to player
+			stop
+		set metadata value "LandClaim" of player to true
+		send yaml value "Messages.RegionClaim.ToggleRegionClaimEnabled" from "core.config" to player
+		while metadata value "LandClaim" of player is set:
+			if {-core::cache::player::%player%::region::position1} and {-core::cache::player::%player%::region::position2} is set:
+				set {_x} to difference between x-coords of {-core::cache::player::%player%::region::position1} and x-coords of {-core::cache::player::%player%::region::position2}
+				set {_z} to difference between z-coords of {-core::cache::player::%player%::region::position1} and z-coords of {-core::cache::player::%player%::region::position2}
+				set {_price} to {_x} * {_z} * yaml value "Settings.RegionClaim.PricePerBlock" from "core.config"
+			if distance between {-core::cache::player::%player%::region::position1} and {-core::cache::player::%player%::region::position2} > 10:
+				set {_bar} to replacer "{price}" and "{x}" and "{z}" with "%{_price}%" and "%{_x}%" and "%{_z}%" in yaml value "Messages.RegionClaim.CostActionBar" from "core.config"
+				send action bar {_bar} to player
+			else:
+				send action bar yaml value "Messages.RegionClaim.TooSmall" from "core.config" to player	
+			wait a tick
+
+command land [<text>]:
+	trigger:
+		land_checkWorld(player) is true
+		if arg-1 is not set:
+			if RegionUtils.getRegionAt(player.getLocation()) is not set:
+				landBrowsePurchase(player)
+				stop
+			set {_region} to RegionUtils.getRegionAt(player.getLocation())
+			if RegionUtils.isOwner({_region} and player) is true:
+				land_ManageRegion(player, {_region})
+		if arg-1 is "claim":
+			land_claim(player)
+
