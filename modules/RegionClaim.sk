@@ -6,9 +6,7 @@ on load:
 	core_check_yaml("config", "Menus.RegionClaim.ManageMember.Menu", "&8➩ &a&nManage&r &b{player}.&r")		
 	core_check_yaml("config", "Menus.RegionClaim.PurchaseRegion.Menu", "&8➩ &a&nPurchase Region.&r")	
 	core_check_yaml("config", "Menus.RegionClaim.PurchaseRegion.Size", "1", "number")		
-#	core_check_yaml("config", "Menus.RegionClaim.OwnerFormart", "&8➩ &7Leader: &e{player}.&r")
-	core_check_yaml_item("config", "Menus.RegionClaim.ManageMember.Kick", "&7❒ &8⬊ &7&nKick member.&r &8⬋ &7❒", "13", "red clay", "&aClick to to kick from this region.")	
-#	core_check_yaml_item("config", "Menus.RegionClaim.ManageMember.MakeLeader", "&7❒ &8⬊ &7&nRemove member.&r &8⬋ &7❒", "0", "chest", "&aClick to to kick from this region.")	
+	core_check_yaml_item("config", "Menus.RegionClaim.ManageMember.Kick", "&7❒ &8⬊ &7&nKick member.&r &8⬋ &7❒", "13", "red clay", "&aClick to to kick from this region.")		
 	if yaml value "Menus.RegionClaim.Purchase" from "core.config" is not set:
 		core_check_yaml("config", "Menus.RegionClaim.Purchase.Small.Size", "50", "number")
 		core_check_yaml("config", "Menus.RegionClaim.Purchase.Medium.Size", "125", "number")
@@ -35,12 +33,8 @@ on load:
 	core_check_yaml("config", "Messages.RegionClaim.ClaimSuccess", "&8➩ &a&nNice!, you claimed this region.&r")
 	core_check_yaml("config", "Messages.RegionClaim.AddedMember", "&8➩ &aNice!, you added &7{player} &ato your region.&r")	
 	core_check_yaml("config", "Messages.RegionClaim.PlayerNotFound", "&8➩ &ePlayer not found, are you sure this player is online?.")	
-	core_check_yaml("config", "Messages.RegionClaim.TooSmall", "&8➩ &aYou selection is too small.&r")	
-	core_check_yaml("config", "Messages.RegionClaim.CostActionBar", "&7➩ &fRegion: &8[&c{x}&8x&c{z}&8], &fthis will cost you &a{price}$. &7❒")		
-	core_check_yaml("config", "Messages.RegionClaim.ToggleRegionClaimEnabled", "&8➩ &aEnabled region claim, use left & right click to define the region.&r")		
-	core_check_yaml("config", "Messages.RegionClaim.ToggleRegionClaimDisabled", "&8➩ &cDisabled region claim.")	
-	core_check_yaml("config", "Settings.RegionClaim.PricePerBlock", "1", "number")	
 	core_check_yaml("config", "Settings.RegionClaim.EnabledWorlds", "survival", "list")			
+	core_check_yaml("config", "Settings.RegionClaim.EnableFences", "true", "boolean")				
 	wait a second
 	save yaml "core.config"
 	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aRegionCaim Module Enabled."
@@ -150,20 +144,12 @@ function land_ManageRegion(p: player, region: object):
 		set metadata value "LandAddMember" of {_p} to "WaitingForReply"
 		open anvil gui with player head and name "Enter Player" to {_p}
 
-function land_calculatePrice(pos1: location, pos2: location, size: number = 0) :: number:
-	if {_size} != 0:
-		set {_calculate} to {_size}*2
-	else:
-		set {_calculate} to rounded difference between x-coords of {_pos1} and x-coords of {_pos2}
-	set {_amount} to {_calculate} * yaml value "Settings.RegionClaim.PricePerBlock" from "core.config"
-	return {_amount}
-
 function landBrowsePurchase(p: player):
 	open chest inventory with yaml value "Menus.RegionClaim.PurchaseRegion.Size" from "core.config" rows named yaml value "Menus.RegionClaim.PurchaseRegion.Menu" from "core.config" to {_p}
 	wait a tick
 	loop yaml nodes with keys "Menus.RegionClaim.Purchase" from "core.config":
 		set {_id} to loop-value-1
-		set {_price} to land_calculatePrice({-core::cache::player::%{_p}%::region::position1}, {-core::cache::player::%{_p}%::region::position2}, yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config")
+		set {_price} to yaml value "Menus.RegionClaim.Purchase.%{_id}%.Price" from "core.config"
 		set {_lore::*} to yaml list "Menus.RegionClaim.Purchase.%{_id}%.Lore" from "core.config"
 		replace all "{price}" with "%{_price}%" in {_lore::*} 
 		make gui slot yaml value "Menus.RegionClaim.Purchase.%{_id}%.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.Purchase.%{_id}%::config} with leaf lore {_lore::*} to run:	
@@ -174,7 +160,7 @@ function landBrowsePurchase(p: player):
 			remove yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" from z-coords of {-core::cache::player::%{_p}%::region::position2}
 			remove yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" from x-coords of {-core::cache::player::%{_p}%::region::position2}
 			wait a tick
-			land_claim({_p})
+			land_claim({_p}, {_price})
 
 function land_build_fence(pos1: location, pos2: location):
 	set {_calculate} to rounded difference between x-coords of {_pos1} and x-coords of {_pos2}
@@ -199,7 +185,7 @@ function land_build_fence(pos1: location, pos2: location):
 		add 1 to x-coords of {_loc2}		
 		wait a tick	
 
-function land_claim(p: player):
+function land_claim(p: player, price: number):
 	if {-core::cache::player::%{_p}%::region::position1} is not set:
 		send replacer "{number}" with "1" in yaml value "Messages.RegionClaim.PositionNotSet" from "core.config" to {_p}
 		stop
@@ -210,10 +196,6 @@ function land_claim(p: player):
 		if RegionUtils.checkOverlap({-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2}) is true:
 			send yaml value "Messages.RegionClaim.Overlap" from "core.config" to {_p}
 			stop
-		if distance between {-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2} < 10:
-			send yaml value "Messages.RegionClaim.TooSmall" from "core.config" to {_p}
-			stop
-		set {_price} to land_calculatePrice({-core::cache::player::%{_p}%::region::position1}, {-core::cache::player::%{_p}%::region::position2})
 		if {_p}'s balance < {_price}:
 			send yaml value "Messages.Homes.BalanceTooLow" from "core.config" to {_p}
 			stop
@@ -224,7 +206,8 @@ function land_claim(p: player):
 		RegionUtils.setEnterMessage({_region} and replacer "{player}" with "%{_p}%" in yaml value "Messages.RegionClaim.DefaultGreeting" from "core.config")
 		RegionUtils.setLeaveMessage({_region} and replacer "{player}" with "%{_p}%" in yaml value "Messages.RegionClaim.DefaultFarewell" from "core.config")
 		#Fences
-		land_build_fence({-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2})
+		if yaml value "Settings.RegionClaim.EnableFences" from "core.config" is true:
+			land_build_fence({-core::cache::player::%{_p}%::region::position1} and {-core::cache::player::%{_p}%::region::position2})
 		#Setting a home location so it will not lose it.
 		set {_homeId} to size of yaml nodes with keys "Region" from "core.player.data.%uuid of {_p}%"
 		set yaml value "Homes.Region-%{_homeId}%.Location" from "core.player.data.%uuid of {_p}%" to location of {_p}
@@ -243,27 +226,6 @@ function land_checkWorld(p: player) :: boolean:
 			set {_result} to true
 	return {_result} ? false		
 
-command claimToggle:
-	trigger:
-		land_checkWorld(player) is true
-		if metadata value "LandClaim" of player is set:
-			delete metadata value "LandClaim" of player
-			send yaml value "Messages.RegionClaim.ToggleRegionClaimDisabled" from "core.config" to player
-			stop
-		set metadata value "LandClaim" of player to true
-		send yaml value "Messages.RegionClaim.ToggleRegionClaimEnabled" from "core.config" to player
-		while metadata value "LandClaim" of player is set:
-			if {-core::cache::player::%player%::region::position1} and {-core::cache::player::%player%::region::position2} is set:
-				set {_x} to difference between x-coords of {-core::cache::player::%player%::region::position1} and x-coords of {-core::cache::player::%player%::region::position2}
-				set {_z} to difference between z-coords of {-core::cache::player::%player%::region::position1} and z-coords of {-core::cache::player::%player%::region::position2}
-				set {_price} to {_x} * {_z} * yaml value "Settings.RegionClaim.PricePerBlock" from "core.config"
-			if distance between {-core::cache::player::%player%::region::position1} and {-core::cache::player::%player%::region::position2} > 10:
-				set {_bar} to replacer "{price}" and "{x}" and "{z}" with "%{_price}%" and "%{_x}%" and "%{_z}%" in yaml value "Messages.RegionClaim.CostActionBar" from "core.config"
-				send action bar {_bar} to player
-			else:
-				send action bar yaml value "Messages.RegionClaim.TooSmall" from "core.config" to player	
-			wait a tick
-
 command land [<text>]:
 	trigger:
 		land_checkWorld(player) is true
@@ -274,6 +236,4 @@ command land [<text>]:
 			set {_region} to RegionUtils.getRegionAt(player.getLocation())
 			if RegionUtils.isOwner({_region} and player) is true:
 				land_ManageRegion(player, {_region})
-		if arg-1 is "claim":
-			land_claim(player)
 
