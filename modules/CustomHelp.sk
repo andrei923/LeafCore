@@ -16,12 +16,8 @@ on load:
 	if yaml value "Help.Footer Last Page" from "core.config" is not set:
 		set yaml value "Help.Footer Last Page" from "core.config" to "&e✱ &8■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ &e✱"			
 	if yaml value "Help.No Pages" from "core.config" is not set:
-		set yaml value "Help.No Pages" from "core.config" to "&7&nNo more pages"			
-	wait a second
-	save yaml "core.config"
-	broadcast "&7❒ &a&nLeafCORE&r &8➩ &aCustomHelp Module Enabled."
-			
-			
+		set yaml value "Help.No Pages" from "core.config" to "&7&nNo more pages"
+					
 command help [<number = 1>]:
 	trigger:	
 		loop yaml nodes with keys "Help.Commands" from "core.config":

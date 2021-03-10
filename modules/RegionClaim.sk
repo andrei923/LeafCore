@@ -142,7 +142,7 @@ function land_ManageRegion(p: player, region: object):
 			close {_p}'s inventory
 	make gui slot yaml value "Menus.RegionClaim.AddMember.Format.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.AddMember.Format::config} to run:
 		set metadata value "LandAddMember" of {_p} to "WaitingForReply"
-		open anvil gui with player head and name "Enter Player" to {_p}
+		open anvil gui with player head and air named "Enter Player" to {_p}
 
 function landBrowsePurchase(p: player):
 	open chest inventory with yaml value "Menus.RegionClaim.PurchaseRegion.Size" from "core.config" rows named yaml value "Menus.RegionClaim.PurchaseRegion.Menu" from "core.config" to {_p}
