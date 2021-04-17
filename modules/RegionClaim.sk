@@ -152,7 +152,7 @@ function landBrowsePurchase(p: player):
 		set {_price} to yaml value "Menus.RegionClaim.Purchase.%{_id}%.Price" from "core.config"
 		set {_lore::*} to yaml list "Menus.RegionClaim.Purchase.%{_id}%.Lore" from "core.config"
 		replace all "{price}" with "%{_price}%" in {_lore::*} 
-		make gui slot yaml value "Menus.RegionClaim.Purchase.%{_id}%.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.Purchase.%{_id}%::config} with leaf lore {_lore::*} to run:	
+		make gui slot yaml value "Menus.RegionClaim.Purchase.%{_id}%.Slot" from "core.config" of {_p} with {-core::cache::Menus.RegionClaim.Purchase.%{_id}%::config} with lore colored {_lore::*} to run:	
 			set {-core::cache::player::%{_p}%::region::position1} to location of {_p}
 			set {-core::cache::player::%{_p}%::region::position2} to location of {_p}
 			add yaml value "Menus.RegionClaim.Purchase.%{_id}%.Size" from "core.config" to z-coords of {-core::cache::player::%{_p}%::region::position1}
